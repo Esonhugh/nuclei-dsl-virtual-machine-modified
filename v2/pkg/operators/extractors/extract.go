@@ -171,11 +171,11 @@ func (e *Extractor) ExtractJSON(corpus string) map[string]struct{} {
 // ExtractDSL execute the expression and returns the results
 func (e *Extractor) ExtractDSL(data map[string]interface{}) map[string]struct{} {
 	results := make(map[string]struct{})
-
+	data = e.mergeOtherData(data) // merge the data with the dsl data
 	for _, compiledExpression := range e.dslCompiled {
 		result, err := compiledExpression.Evaluate(data)
 		// ignore errors that are related to missing parameters
-		// eg: dns dsl can have all the parameters that are not present 
+		// eg: dns dsl can have all the parameters that are not present
 		if err != nil && !strings.HasPrefix(err.Error(), "No parameter") {
 			return results
 		}
